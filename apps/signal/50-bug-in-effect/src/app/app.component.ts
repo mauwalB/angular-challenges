@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   effect,
   model,
 } from '@angular/core';
@@ -40,14 +41,18 @@ export class AppComponent {
   ram = model(false);
   gpu = model(false);
 
+  private lastBoxes = 0;
+
+  checkedBoxes = computed(
+    () => [this.drive(), this.ram(), this.gpu()].filter(Boolean).length,
+  );
+
   constructor() {
-    /* 
-      Explain for your junior team mate why this bug occurs ...
-    */
     effect(() => {
-      if (this.drive() || this.ram() || this.gpu()) {
+      if (this.checkedBoxes() > this.lastBoxes) {
         alert('Price increased!');
       }
+      this.lastBoxes = this.checkedBoxes();
     });
   }
 }
