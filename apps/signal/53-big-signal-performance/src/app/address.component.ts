@@ -1,6 +1,11 @@
 import { CDFlashingDirective } from '@angular-challenges/shared/directives';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { UserStore } from './user.service';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+} from '@angular/core';
+import { Address } from './user.service';
 
 @Component({
   selector: 'address-user',
@@ -8,14 +13,18 @@ import { UserStore } from './user.service';
   template: `
     <div cd-flash class="m-4 block border border-gray-500 p-4">
       Address:
-      <div>Street: {{ userService.user().address.street }}</div>
-      <div>ZipCode: {{ userService.user().address.zipCode }}</div>
-      <div>City: {{ userService.user().address.city }}</div>
+      <div>Street: {{ street() }}</div>
+      <div>ZipCode: {{ zipCode() }}</div>
+      <div>City: {{ city() }}</div>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CDFlashingDirective],
 })
 export class AddressComponent {
-  userService = inject(UserStore);
+  address = input<Address>({ street: '', zipCode: '', city: '' });
+
+  street = computed(() => this.address()?.street ?? '');
+  zipCode = computed(() => this.address()?.zipCode ?? '');
+  city = computed(() => this.address()?.city ?? '');
 }
