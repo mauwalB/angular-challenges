@@ -14,7 +14,9 @@ export const currency: Currency[] = [
   { name: 'Dollar Autralien', code: 'AUD', symbol: 'AU$' },
   { name: 'Livre Sterling', code: 'GBP', symbol: '£' },
   { name: 'Dollar Canadien', code: 'CAD', symbol: 'CAD' },
-];
+] as const;
+
+export type CurrencyCode = (typeof currency)[number]['code'];
 
 @Injectable()
 export class CurrencyService extends ComponentStore<{ code: string }> {
